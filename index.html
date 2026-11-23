@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第二大隊第二組資料整合暨訓練公告平台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              800: '#1e3a5f',
+              900: '#0f2544',
+              950: '#09172e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* 自訂捲軸樣式 */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- 頂部導覽列 -->
+  <header class="bg-navy-900 text-white shadow-lg sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- 網站標題與識別 -->
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-500 text-navy-950 flex items-center justify-center font-bold shadow">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+            </svg>
+          </div>
+          <div class="truncate">
+            <h1 class="text-base sm:text-lg font-bold tracking-wide truncate">
+              第二大隊第二組資料整合暨訓練公告平台
+            </h1>
+            <p class="text-xs text-slate-300 hidden sm:block">
+              Unit 2-2 Data Integration &amp; Training Announcement Portal
+            </p>
+          </div>
+        </div>
+
+        <!-- 桌面版導覽連結 -->
+        <nav class="hidden md:flex items-center space-x-1">
+          <a href="#announcements" class="px-3 py-2 rounded-md text-sm font-medium text-slate-200 hover:text-white hover:bg-navy-800 transition">
+            訓練公告區
+          </a>
+          <a href="#projects" class="px-3 py-2 rounded-md text-sm font-medium text-slate-200 hover:text-white hover:bg-navy-800 transition">
+            專案列表
+          </a>
+          <a href="#uploads" class="px-3 py-2 rounded-md text-sm font-medium text-slate-200 hover:text-white hover:bg-navy-800 transition">
+            上傳檔案區
+          </a>
+          <button onclick="resetDemoData()" class="ml-2 px-3 py-1.5 rounded-md text-xs font-medium bg-navy-800 hover:bg-slate-700 text-slate-300 border border-slate-600 transition" title="重設為預設範例資料">
+            重置範例
+          </button>
+        </nav>
+
+        <!-- 手機版選單按鈕 -->
+        <div class="md:hidden">
+          <button id="mobile-menu-btn" type="button" class="p-2 rounded-md text-slate-300 hover:text-white hover:bg-navy-800 focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 手機版下拉選單 -->
+    <div id="mobile-menu" class="hidden md:hidden bg-navy-950 border-t border-navy-800 px-4 py-3 space-y-1">
+      <a href="#announcements" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-navy-800">訓練公告區</a>
+      <a href="#projects" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-navy-800">專案列表</a>
+      <a href="#uploads" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-200 hover:bg-navy-800">上傳檔案區</a>
+      <button onclick="resetDemoData(); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-amber-400 hover:bg-navy-800">
+        重置為預設範例資料
+      </button>
+    </div>
+  </header>
+
+  <!-- 頂部統計與現況摘要橫幅 -->
+  <section class="bg-gradient-to-r from-navy-900 via-navy-800 to-slate-800 text-white py-8 border-b border-slate-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div>
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-medium mb-3">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            免登入即時運作｜本機瀏覽器暫存模式
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight">業務資料整合與訓練任務儀表板</h2>
+          <p class="mt-1.5 text-sm sm:text-base text-slate-300 max-w-2xl">
+            集中管理第二大隊第二組最新訓練通報、各項專案進度追蹤及業務表單檔案彙整，支援即時檢視與本機測試操作。
+          </p>
+        </div>
+
+        <!-- 數據卡片 -->
+        <div class="grid grid-cols-3 gap-3 sm:gap-4 shrink-0">
+          <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl p-3 sm:p-4 text-center">
+            <div id="stat-announcements" class="text-2xl sm:text-3xl font-bold text-amber-400">0</div>
+            <div class="text-xs sm:text-sm text-slate-300 mt-1">有效公告</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl p-3 sm:p-4 text-center">
+            <div id="stat-projects" class="text-2xl sm:text-3xl font-bold text-sky-400">0</div>
+            <div class="text-xs sm:text-sm text-slate-300 mt-1">列管專案</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl p-3 sm:p-4 text-center">
+            <div id="stat-files" class="text-2xl sm:text-3xl font-bold text-emerald-400">0</div>
+            <div class="text-xs sm:text-sm text-slate-300 mt-1">已彙整檔案</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 主要內容區塊 -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+
+    <!-- ==================== 1. 公告區 ==================== -->
+    <section id="announcements" class="scroll-mt-20">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
+        <div class="flex items-center gap-2.5">
+          <span class="w-1.5 h-7 bg-amber-500 rounded-full"></span>
+          <div>
+            <h3 class="text-xl font-bold text-slate-900">最新訓練與業務公告</h3>
+            <p class="text-sm text-slate-500">重要訓令、常年訓練排程與組內業務通知</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <div id="announcement-filters" class="inline-flex rounded-lg bg-slate-200/70 p-1 text-xs sm:text-sm">
+            <button data-cat="全部" class="ann-filter-btn px-3 py-1.5 rounded-md font-medium bg-white text-slate-900 shadow-sm transition">全部</button>
+            <button data-cat="訓練通報" class="ann-filter-btn px-3 py-1.5 rounded-md font-medium text-slate-600 hover:text-slate-900 transition">訓練通報</button>
+            <button data-cat="業務公告" class="ann-filter-btn px-3 py-1.5 rounded-md font-medium text-slate-600 hover:text-slate-900 transition">業務公告</button>
+            <button data-cat="緊急通知" class="ann-filter-btn px-3 py-1.5 rounded-md font-medium text-slate-600 hover:text-slate-900 transition">緊急通知</button>
+          </div>
+          <button onclick="openAnnouncementModal()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-navy-800 hover:bg-navy-900 text-white text-sm font-medium shadow-sm transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            發布公告
+          </button>
+        </div>
+      </div>
+
+      <!-- 公告列表容器 -->
+      <div id="announcement-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- JS 動態渲染 -->
+      </div>
+    </section>
+
+    <!-- ==================== 2. 專案列表 ==================== -->
+    <section id="projects" class="scroll-mt-20">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
+        <div class="flex items-center gap-2.5">
+          <span class="w-1.5 h-7 bg-sky-600 rounded-full"></span>
+          <div>
+            <h3 class="text-xl font-bold text-slate-900">專案整合列表</h3>
+            <p class="text-sm text-slate-500">追蹤組內各項系統建置、演訓籌備與資料整合進度</p>
+          </div>
+        </div>
+        <button onclick="openProjectModal()" class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium shadow-sm transition self-start sm:self-auto">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          新增專案
+        </button>
+      </div>
+
+      <!-- 搜尋與狀態篩選列 -->
+      <div class="bg-white rounded-t-xl border border-slate-200 p-4 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+        <div class="relative flex-1 max-w-md">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+          <input id="project-search" type="text" placeholder="搜尋專案名稱、承辦人或類別..." class="w-full pl-9 pr-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+        </div>
+        <div class="flex items-center gap-2">
+          <label for="project-status-filter" class="text-xs font-medium text-slate-500 whitespace-nowrap">狀態篩選：</label>
+          <select id="project-status-filter" class="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+            <option value="全部">全部狀態</option>
+            <option value="進行中">進行中</option>
+            <option value="待審核">待審核</option>
+            <option value="規劃中">規劃中</option>
+            <option value="已完成">已完成</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 桌面版表格 -->
+      <div class="hidden md:block bg-white border-x border-b border-slate-200 rounded-b-xl overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-slate-200 text-sm">
+            <thead class="bg-slate-50 text-slate-600">
+              <tr>
+                <th class="px-5 py-3.5 text-left font-semibold">專案名稱 / 代號</th>
+                <th class="px-4 py-3.5 text-left font-semibold">類別</th>
+                <th class="px-4 py-3.5 text-left font-semibold">承辦人 / 分組</th>
+                <th class="px-4 py-3.5 text-left font-semibold w-44">執行進度</th>
+                <th class="px-4 py-3.5 text-left font-semibold">預計完成日</th>
+                <th class="px-4 py-3.5 text-left font-semibold">狀態</th>
+                <th class="px-4 py-3.5 text-right font-semibold">操作</th>
+              </tr>
+            </thead>
+            <tbody id="project-table-body" class="divide-y divide-slate-100 bg-white">
+              <!-- JS 動態渲染 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 手機版卡片列表 -->
+      <div id="project-mobile-list" class="md:hidden space-y-3 mt-3">
+        <!-- JS 動態渲染 -->
+      </div>
+    </section>
+
+    <!-- ==================== 3. 上傳檔案區 ==================== -->
+    <section id="uploads" class="scroll-mt-20">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
+        <div class="flex items-center gap-2.5">
+          <span class="w-1.5 h-7 bg-emerald-600 rounded-full"></span>
+          <div>
+            <h3 class="text-xl font-bold text-slate-900">資料上傳與檔案整合區</h3>
+            <p class="text-sm text-slate-500">拖曳或選取訓練簡報、簽到表、專案計畫書等檔案進行彙整與下載</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- 左側：上傳控制面板 -->
+        <div class="lg:col-span-5 bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between">
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="upload-category" class="block text-xs font-semibold text-slate-700 mb-1">檔案分類</label>
+                <select id="upload-category" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                  <option value="訓練教材">訓練教材</option>
+                  <option value="專案簡報">專案簡報</option>
+                  <option value="表單範本">表單範本</option>
+                  <option value="會議紀錄">會議紀錄</option>
+                  <option value="其他資料">其他資料</option>
+                </select>
+              </div>
+              <div>
+                <label for="upload-uploader" class="block text-xs font-semibold text-slate-700 mb-1">上傳人員 / 單位</label>
+                <input id="upload-uploader" type="text" value="第二組業務窗口" placeholder="例：陳組員" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+              </div>
+            </div>
+
+            <!-- 拖曳上傳區 -->
+            <div id="drop-zone" class="border-2 border-dashed border-slate-300 hover:border-emerald-500 bg-slate-50 hover:bg-emerald-50/40 rounded-xl p-6 text-center transition cursor-pointer">
+              <input id="file-input" type="file" multiple class="hidden" />
+              <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                </svg>
+              </div>
+              <p class="text-sm font-semibold text-slate-700">點擊此處選取檔案，或將檔案拖曳至此</p>
+              <p class="text-xs text-slate-500 mt-1">支援 PDF、Word、Excel、PPT、圖片、壓縮檔等各式檔案（可多選）</p>
+              <button type="button" onclick="document.getElementById('file-input').click()" class="mt-4 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium shadow-sm transition">
+                瀏覽本機檔案
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-start gap-2 text-xs text-slate-500">
+            <svg class="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+            </svg>
+            <span>本平台採無資料庫架構，新上傳之檔案僅暫存於目前瀏覽器記憶體中供即時檢視與下載，重新整理頁面後將會重置。</span>
+          </div>
+        </div>
+
+        <!-- 右側：已上傳檔案清單 -->
+        <div class="lg:col-span-7 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+          <div class="px-5 py-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 bg-slate-50/70">
+            <div class="flex items-center gap-2">
+              <h4 class="font-bold text-slate-800 text-sm sm:text-base">已整合檔案清單</h4>
+              <span id="file-count-badge" class="px-2 py-0.5 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">0 筆</span>
+            </div>
+            <select id="file-filter-category" class="text-xs sm:text-sm border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="全部">全部分類</option>
+              <option value="訓練教材">訓練教材</option>
+              <option value="專案簡報">專案簡報</option>
+              <option value="表單範本">表單範本</option>
+              <option value="會議紀錄">會議紀錄</option>
+              <option value="其他資料">其他資料</option>
+            </select>
+          </div>
+
+          <div id="file-list" class="divide-y divide-slate-100 flex-1 max-h-[420px] overflow-y-auto">
+            <!-- JS 動態渲染 -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 頁尾 -->
+  <footer class="bg-navy-950 text-slate-400 py-6 mt-12 border-t border-navy-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs sm:text-sm">
+      <div class="font-medium text-slate-300">
+        第二大隊第二組資料整合暨訓練公告平台
+      </div>
+      <div>
+        免登入單頁式前端整合介面｜無後端資料庫架構
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== Modals (彈跳視窗) ==================== -->
+
+  <!-- 1. 檢視公告詳情 Modal -->
+  <div id="detail-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden animate-fade-in">
+      <div class="px-6 py-4 bg-navy-900 text-white flex items-center justify-between">
+        <span id="detail-category" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500 text-navy-950"></span>
+        <button onclick="closeModal('detail-modal')" class="text-slate-300 hover:text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div>
+          <h4 id="detail-title" class="text-lg font-bold text-slate-900"></h4>
+          <p id="detail-meta" class="text-xs text-slate-500 mt-1"></p>
+        </div>
+        <div id="detail-content" class="text-sm text-slate-700 leading-relaxed whitespace-pre-line bg-slate-50 p-4 rounded-xl border border-slate-200"></div>
+      </div>
+      <div class="px-6 py-3 bg-slate-50 border-t border-slate-200 flex justify-end">
+        <button onclick="closeModal('detail-modal')" class="px-4 py-2 rounded-lg bg-navy-800 text-white text-sm font-medium hover:bg-navy-900 transition">關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 新增公告 Modal -->
+  <div id="announcement-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden">
+      <div class="px-6 py-4 bg-navy-900 text-white flex items-center justify-between">
+        <h4 class="font-bold text-base">發布新公告</h4>
+        <button onclick="closeModal('announcement-modal')" class="text-slate-300 hover:text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form id="announcement-form" class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">公告標題 *</label>
+          <input id="ann-title" type="text" required placeholder="請輸入公告主旨" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-navy-800" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">公告類別</label>
+            <select id="ann-category" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white">
+              <option value="訓練通報">訓練通報</option>
+              <option value="業務公告">業務公告</option>
+              <option value="緊急通知">緊急通知</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">發布單位 / 人員</label>
+            <input id="ann-author" type="text" value="第二組訓練科" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2" />
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <input id="ann-pinned" type="checkbox" class="rounded border-slate-300 text-navy-800 focus:ring-navy-800" />
+          <label for="ann-pinned" class="text-sm text-slate-700">設為置頂重要公告</label>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">公告內容 *</label>
+          <textarea id="ann-content" rows="4" required placeholder="請輸入詳細說明、時間、地點或應配合事項..." class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-navy-800"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModal('announcement-modal')" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50">取消</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-navy-800 text-white text-sm font-medium hover:bg-navy-900">確認發布</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. 新增專案 Modal -->
+  <div id="project-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden">
+      <div class="px-6 py-4 bg-sky-700 text-white flex items-center justify-between">
+        <h4 class="font-bold text-base">新增列管專案</h4>
+        <button onclick="closeModal('project-modal')" class="text-sky-100 hover:text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form id="project-form" class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">專案名稱 *</label>
+          <input id="proj-name" type="text" required placeholder="例：第四季裝備妥善率資料彙整" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-600" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">專案類別</label>
+            <select id="proj-category" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white">
+              <option value="資料整合">資料整合</option>
+              <option value="教育訓練">教育訓練</option>
+              <option value="裝備維保">裝備維保</option>
+              <option value="系統優化">系統優化</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">承辦人員 *</label>
+            <input id="proj-owner" type="text" required placeholder="例：林小隊長" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2" />
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">執行進度 (%)</label>
+            <input id="proj-progress" type="number" min="0" max="100" value="25" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">狀態</label>
+            <select id="proj-status" class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white">
+              <option value="進行中">進行中</option>
+              <option value="規劃中">規劃中</option>
+              <option value="待審核">待審核</option>
+              <option value="已完成">已完成</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">預計完成日</label>
+            <input id="proj-deadline" type="date" required class="w-full text-sm border border-slate-300 rounded-lg px-2 py-2" />
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModal('project-modal')" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50">取消</button>
+          <button type="submit" class="px-4 py-2 rounded-lg bg-sky-600 text-white text-sm font-medium hover:bg-sky-700">新增專案</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast 提示訊息 -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden transform transition-all duration-300">
+    <div class="bg-navy-900 text-white px-4 py-3 rounded-xl shadow-xl border border-slate-700 flex items-center gap-2.5 text-sm">
+      <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span id="toast-msg">操作成功</span>
+    </div>
+  </div>
+
+  <!-- ==================== JavaScript 邏輯 ==================== -->
+  <script>
+    // --- 預設範例資料 ---
+    const DEFAULT_ANNOUNCEMENTS = [
+      {
+        id: 'ann-1',
+        title: '【重要】115年度第四季常年術科複訓暨測驗時程公告',
+        category: '訓練通報',
+        author: '第二組訓練官',
+        date: '2026-11-23',
+        pinned: true,
+        content: '請各分隊依排定梯次準時前往大隊訓練場報到參訓。\n\n一、報到時間：每日 08:30 至 08:50。\n二、應備器材：個人防護裝備、無線電及紀錄簿。\n三、注意事項：若因勤務無法出席，請於訓前 3 日填報調訓申請表並上傳至本平台檔案區。'
+      },
+      {
+        id: 'ann-2',
+        title: '第二組年度業務資料整合盤點作業說明',
+        category: '業務公告',
+        author: '第二組組長室',
+        date: '2026-11-21',
+        pinned: true,
+        content: '為提升大隊部資料檢索效率，請各承辦人於本月底前將今年度各專案之結案報告、簽到表掃描檔及簡報檔統一命名後上傳至本平台「資料上傳與檔案整合區」，檔名請統一格式為：【日期_專案名稱_承辦人】。'
+      },
+      {
+        id: 'ann-3',
+        title: '緊急通訊裝備定期保養暨頻道測試通知',
+        category: '緊急通知',
+        author: '通訊維修小組',
+        date: '2026-11-20',
+        pinned: false,
+        content: '本週五下午 14:00 將進行大隊中繼台例行檢測與備援頻道測試，測試期間請各分隊配合回報訊號強度，並確認手邊攜行式無線電電池蓄電狀況正常。'
+      },
+      {
+        id: 'ann-4',
+        title: '新版災害搶救標準作業程序（SOP）簡報教材已上架',
+        category: '訓練通報',
+        author: '第二組教官團',
+        date: '2026-11-18',
+        pinned: false,
+        content: '修訂版複合式災害應變 SOP 教學簡報已更新完畢，請各小隊利用勤餘時間下載研讀，並於下次組務會議進行案例研討。'
+      }
+    ];
+
+    const DEFAULT_PROJECTS = [
+      {
+        id: 'proj-1',
+        code: 'PRJ-2026-01',
+        name: '第二大隊救災訓練電子化歷程建置',
+        category: '資料整合',
+        owner: '陳組員 / 第二組',
+        progress: 85,
+        deadline: '2026-12-10',
+        status: '進行中'
+      },
+      {
+        id: 'proj-2',
+        code: 'PRJ-2026-02',
+        name: '冬季複合式演訓場地與人員調度計畫',
+        category: '教育訓練',
+        owner: '林教官 / 訓練科',
+        progress: 60,
+        deadline: '2026-12-05',
+        status: '進行中'
+      },
+      {
+        id: 'proj-3',
+        code: 'PRJ-2026-03',
+        name: '大隊特種車輛與器材檢查表單數位化',
+        category: '裝備維保',
+        owner: '張技士 / 整備組',
+        progress: 100,
+        deadline: '2026-11-15',
+        status: '已完成'
+      },
+      {
+        id: 'proj-4',
+        code: 'PRJ-2026-04',
+        name: '跨分隊通訊圖資與指揮手冊彙整',
+        category: '資料整合',
+        owner: '王小隊長 / 第一分隊',
+        progress: 95,
+        deadline: '2026-11-28',
+        status: '待審核'
+      },
+      {
+        id: 'proj-5',
+        code: 'PRJ-2026-05',
+        name: '116年度新進人員基礎訓課程規劃',
+        category: '教育訓練',
+        owner: '吳科員 / 第二組',
+        progress: 20,
+        deadline: '2027-01-15',
+        status: '規劃中'
+      }
+    ];
+
+    // 預設可下載範例檔案（透過 Blob 產生，免伺服器即可真實測試下載）
+    function createSampleFiles() {
+      const sampleDocs = [
+        {
+          id: 'file-1',
+          name: '115年第四季常年訓練排程表.txt',
+          category: '訓練教材',
+          uploader: '第二組訓練官',
+          size: 1024,
+          time: '2026-11-23 09:15',
+          content: '第二大隊第二組 115年第四季常年訓練排程表\n\n第一梯次：12/01 (二) 08:30-16:30\n第二梯次：12/03 (四) 08:30-16:30\n地點：大隊綜合訓練場\n'
+        },
+        {
+          id: 'file-2',
+          name: '專案進度彙報單範本.csv',
+          category: '表單範本',
+          uploader: '陳組員',
+          size: 512,
+          time: '2026-11-21 14:30',
+          content: '\uFEFF專案代號,專案名稱,承辦人,目前進度,備註\nPRJ-2026-01,救災訓練電子化歷程建置,陳組員,85%,測試中\n'
+        },
+        {
+          id: 'file-3',
+          name: '第二組11月份組務會議紀錄.txt',
+          category: '會議紀錄',
+          uploader: '組長室秘書',
+          size: 2048,
+          time: '2026-11-19 16:40',
+          content: '第二大隊第二組 11月份組務會議紀錄\n一、主席致詞\n二、各專案進度報告\n三、臨時動議\n'
+        }
+      ];
+
+      return sampleDocs.map(doc => {
+        const blob = new Blob([doc.content], { type: 'text/plain;charset=utf-8' });
+        return {
+          id: doc.id,
+          name: doc.name,
+          category: doc.category,
+          uploader: doc.uploader,
+          size: blob.size,
+          time: doc.time,
+          url: URL.createObjectURL(blob)
+        };
+      });
+    }
+
+    // --- 狀態管理 (使用 localStorage 保存公告與專案，檔案存於記憶體) ---
+    let announcements = [];
+    let projects = [];
+    let uploadedFiles = [];
+    let currentAnnFilter = '全部';
+
+    function loadInitialData() {
+      const savedAnn = localStorage.getItem('u22_announcements');
+      const savedProj = localStorage.getItem('u22_projects');
+
+      announcements = savedAnn ? JSON.parse(savedAnn) : structuredClone(DEFAULT_ANNOUNCEMENTS);
+      projects = savedProj ? JSON.parse(savedProj) : structuredClone(DEFAULT_PROJECTS);
+      uploadedFiles = createSampleFiles();
+    }
+
+    function saveLocalData() {
+      localStorage.setItem('u22_announcements', JSON.stringify(announcements));
+      localStorage.setItem('u22_projects', JSON.stringify(projects));
+    }
+
+    function resetDemoData() {
+      localStorage.removeItem('u22_announcements');
+      localStorage.removeItem('u22_projects');
+      loadInitialData();
+      renderAll();
+      showToast('已重置為預設範例資料');
+    }
+
+    // --- 工具函式 ---
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+    }
+
+    function getCurrentTimestamp() {
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      toast.classList.remove('hidden');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 2800);
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    }
+    document.getElementById('mobile-menu-btn').addEventListener('click', toggleMobileMenu);
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    // --- 1. 公告區渲染與互動 ---
+    function getAnnBadgeClass(cat) {
+      switch (cat) {
+        case '緊急通知': return 'bg-rose-100 text-rose-700 border-rose-200';
+        case '訓練通報': return 'bg-amber-100 text-amber-800 border-amber-200';
+        default: return 'bg-sky-100 text-sky-700 border-sky-200';
+      }
+    }
+
+    function renderAnnouncements() {
+      const container = document.getElementById('announcement-list');
+      const filtered = announcements
+        .filter(a => currentAnnFilter === '全部' || a.category === currentAnnFilter)
+        .sort((a, b) => Number(b.pinned) - Number(a.pinned));
+
+      document.getElementById('stat-announcements').textContent = announcements.length;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full bg-white rounded-xl border border-slate-200 p-8 text-center text-slate-500 text-sm">
+            目前此分類暫無公告資料。
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(ann => `
+        <article class="bg-white rounded-xl border ${ann.pinned ? 'border-amber-300 ring-1 ring-amber-200/70' : 'border-slate-200'} p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between gap-3">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2.5">
+              <div class="flex items-center gap-2 flex-wrap">
+                ${ann.pinned ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-bold bg-amber-500 text-white">置頂</span>' : ''}
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold border ${getAnnBadgeClass(ann.category)}">${escapeHtml(ann.category)}</span>
+              </div>
+              <span class="text-xs text-slate-400">${escapeHtml(ann.date)}</span>
+            </div>
+            <h4 onclick="viewAnnouncement('${ann.id}')" class="text-base font-bold text-slate-900 hover:text-navy-800 cursor-pointer line-clamp-2">
+              ${escapeHtml(ann.title)}
+            </h4>
+            <p class="text-sm text-slate-600 mt-2 line-clamp-2 leading-relaxed">
+              ${escapeHtml(ann.content)}
+            </p>
+          </div>
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <span>發布：${escapeHtml(ann.author)}</span>
+            <div class="flex items-center gap-3">
+              <button onclick="viewAnnouncement('${ann.id}')" class="text-navy-800 font-semibold hover:underline">閱讀全文</button>
+              <button onclick="deleteAnnouncement('${ann.id}')" class="text-slate-400 hover:text-rose-600 transition" title="刪除公告">刪除</button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    document.querySelectorAll('.ann-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentAnnFilter = btn.dataset.cat;
+        document.querySelectorAll('.ann-filter-btn').forEach(b => {
+          b.className = 'ann-filter-btn px-3 py-1.5 rounded-md font-medium text-slate-600 hover:text-slate-900 transition';
+        });
+        btn.className = 'ann-filter-btn px-3 py-1.5 rounded-md font-medium bg-white text-slate-900 shadow-sm transition';
+        renderAnnouncements();
+      });
+    });
+
+    function viewAnnouncement(id) {
+      const ann = announcements.find(a => a.id === id);
+      if (!ann) return;
+      document.getElementById('detail-category').textContent = ann.category;
+      document.getElementById('detail-title').textContent = ann.title;
+      document.getElementById('detail-meta').textContent = `發布單位：${ann.author} ｜ 日期：${ann.date}`;
+      document.getElementById('detail-content').textContent = ann.content;
+      document.getElementById('detail-modal').classList.remove('hidden');
+    }
+
+    function deleteAnnouncement(id) {
+      announcements = announcements.filter(a => a.id !== id);
+      saveLocalData();
+      renderAnnouncements();
+      showToast('已移除該則公告');
+    }
+
+    function openAnnouncementModal() {
+      document.getElementById('announcement-form').reset();
+      document.getElementById('ann-author').value = '第二組訓練科';
+      document.getElementById('announcement-modal').classList.remove('hidden');
+    }
+
+    document.getElementById('announcement-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const today = new Date().toISOString().slice(0, 10);
+      const newAnn = {
+        id: 'ann-' + Date.now(),
+        title: document.getElementById('ann-title').value.trim(),
+        category: document.getElementById('ann-category').value,
+        author: document.getElementById('ann-author').value.trim() || '第二組',
+        date: today,
+        pinned: document.getElementById('ann-pinned').checked,
+        content: document.getElementById('ann-content').value.trim()
+      };
+      announcements.unshift(newAnn);
+      saveLocalData();
+      closeModal('announcement-modal');
+      renderAnnouncements();
+      showToast('新公告已成功發布');
+    });
+
+    // --- 2. 專案列表渲染與互動 ---
+    function getStatusBadge(status) {
+      switch (status) {
+        case '已完成': return 'bg-emerald-100 text-emerald-800 border-emerald-200';
+        case '進行中': return 'bg-sky-100 text-sky-800 border-sky-200';
+        case '待審核': return 'bg-amber-100 text-amber-800 border-amber-200';
+        default: return 'bg-slate-100 text-slate-700 border-slate-200';
+      }
+    }
+
+    function getProgressBarColor(progress, status) {
+      if (status === '已完成' || progress >= 100) return 'bg-emerald-500';
+      if (progress >= 60) return 'bg-sky-500';
+      if (progress >= 30) return 'bg-amber-500';
+      return 'bg-slate-400';
+    }
+
+    function renderProjects() {
+      const keyword = document.getElementById('project-search').value.trim().toLowerCase();
+      const statusFilter = document.getElementById('project-status-filter').value;
+
+      const filtered = projects.filter(p => {
+        const matchStatus = statusFilter === '全部' || p.status === statusFilter;
+        const matchKey = !keyword ||
+          p.name.toLowerCase().includes(keyword) ||
+          p.owner.toLowerCase().includes(keyword) ||
+          p.category.toLowerCase().includes(keyword) ||
+          p.code.toLowerCase().includes(keyword);
+        return matchStatus && matchKey;
+      });
+
+      document.getElementById('stat-projects').textContent = projects.length;
+
+      const tbody = document.getElementById('project-table-body');
+      const mobileList = document.getElementById('project-mobile-list');
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="px-5 py-8 text-center text-slate-500">查無符合條件的專案資料</td></tr>`;
+        mobileList.innerHTML = `<div class="bg-white rounded-xl border border-slate-200 p-6 text-center text-slate-500 text-sm">查無符合條件的專案資料</div>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(p => `
+        <tr class="hover:bg-slate-50/80 transition">
+          <td class="px-5 py-4">
+            <div class="font-semibold text-slate-900">${escapeHtml(p.name)}</div>
+            <div class="text-xs text-slate-400 mt-0.5">${escapeHtml(p.code)}</div>
+          </td>
+          <td class="px-4 py-4">
+            <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-medium">${escapeHtml(p.category)}</span>
+          </td>
+          <td class="px-4 py-4 text-slate-600">${escapeHtml(p.owner)}</td>
+          <td class="px-4 py-4">
+            <div class="flex items-center gap-2">
+              <div class="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
+                <div class="h-full ${getProgressBarColor(p.progress, p.status)} transition-all duration-300" style="width: ${p.progress}%"></div>
+              </div>
+              <span class="text-xs font-semibold text-slate-600 w-9 text-right">${p.progress}%</span>
+            </div>
+          </td>
+          <td class="px-4 py-4 text-slate-600 text-xs">${escapeHtml(p.deadline)}</td>
+          <td class="px-4 py-4">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold border ${getStatusBadge(p.status)}">${escapeHtml(p.status)}</span>
+          </td>
+          <td class="px-4 py-4 text-right whitespace-nowrap">
+            <button onclick="advanceProject('${p.id}')" class="text-xs font-medium text-sky-600 hover:text-sky-800 mr-2" title="進度+20%">推進進度</button>
+            <button onclick="deleteProject('${p.id}')" class="text-xs font-medium text-slate-400 hover:text-rose-600">刪除</button>
+          </td>
+        </tr>
+      `).join('');
+
+      mobileList.innerHTML = filtered.map(p => `
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm space-y-3">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <span class="text-xs text-slate-400">${escapeHtml(p.code)} · ${escapeHtml(p.category)}</span>
+              <h4 class="font-bold text-slate-900 text-sm mt-0.5">${escapeHtml(p.name)}</h4>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold border shrink-0 ${getStatusBadge(p.status)}">${escapeHtml(p.status)}</span>
+          </div>
+          <div class="text-xs text-slate-600 flex justify-between">
+            <span>承辦：${escapeHtml(p.owner)}</span>
+            <span>期限：${escapeHtml(p.deadline)}</span>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs text-slate-600 mb-1">
+              <span>執行進度</span>
+              <span class="font-semibold">${p.progress}%</span>
+            </div>
+            <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
+              <div class="h-full ${getProgressBarColor(p.progress, p.status)}" style="width: ${p.progress}%"></div>
+            </div>
+          </div>
+          <div class="pt-2 border-t border-slate-100 flex justify-end gap-3 text-xs">
+            <button onclick="advanceProject('${p.id}')" class="text-sky-600 font-semibold">推進進度 (+20%)</button>
+            <button onclick="deleteProject('${p.id}')" class="text-rose-500">刪除</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('project-search').addEventListener('input', renderProjects);
+    document.getElementById('project-status-filter').addEventListener('change', renderProjects);
+
+    function openProjectModal() {
+      document.getElementById('project-form').reset();
+      const nextMonth = new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10);
+      document.getElementById('proj-deadline').value = nextMonth;
+      document.getElementById('project-modal').classList.remove('hidden');
+    }
+
+    document.getElementById('project-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const progress = Math.min(100, Math.max(0, Number(document.getElementById('proj-progress').value) || 0));
+      let status = document.getElementById('proj-status').value;
+      if (progress === 100) status = '已完成';
+
+      const newProj = {
+        id: 'proj-' + Date.now(),
+        code: 'PRJ-2026-' + String(projects.length + 1).padStart(2, '0'),
+        name: document.getElementById('proj-name').value.trim(),
+        category: document.getElementById('proj-category').value,
+        owner: document.getElementById('proj-owner').value.trim(),
+        progress,
+        deadline: document.getElementById('proj-deadline').value,
+        status
+      };
+      projects.unshift(newProj);
+      saveLocalData();
+      closeModal('project-modal');
+      renderProjects();
+      showToast('已新增列管專案');
+    });
+
+    function advanceProject(id) {
+      const proj = projects.find(p => p.id === id);
+      if (!proj) return;
+      if (proj.progress >= 100) {
+        showToast('此專案已達 100% 完成');
+        return;
+      }
+      proj.progress = Math.min(100, proj.progress + 20);
+      if (proj.progress === 100) {
+        proj.status = '已完成';
+      } else if (proj.status === '規劃中') {
+        proj.status = '進行中';
+      }
+      saveLocalData();
+      renderProjects();
+      showToast(`「${proj.name}」進度已更新為 ${proj.progress}%`);
+    }
+
+    function deleteProject(id) {
+      projects = projects.filter(p => p.id !== id);
+      saveLocalData();
+      renderProjects();
+      showToast('已刪除該專案');
+    }
+
+    // --- 3. 上傳檔案區渲染與互動 ---
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+
+    ['dragenter', 'dragover'].forEach(evt => {
+      dropZone.addEventListener(evt, e => {
+        e.preventDefault();
+        dropZone.classList.add('border-emerald-500', 'bg-emerald-50');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(evt => {
+      dropZone.addEventListener(evt, e => {
+        e.preventDefault();
+        dropZone.classList.remove('border-emerald-500', 'bg-emerald-50');
+      });
+    });
+
+    dropZone.addEventListener('drop', e => {
+      if (e.dataTransfer.files.length) {
+        handleFilesUpload(e.dataTransfer.files);
+      }
+    });
+
+    fileInput.addEventListener('change', e => {
+      if (e.target.files.length) {
+        handleFilesUpload(e.target.files);
+        fileInput.value = '';
+      }
+    });
+
+    function handleFilesUpload(fileList) {
+      const category = document.getElementById('upload-category').value;
+      const uploader = document.getElementById('upload-uploader').value.trim() || '匿名人員';
+      const time = getCurrentTimestamp();
+
+      Array.from(fileList).forEach(file => {
+        uploadedFiles.unshift({
+          id: 'file-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+          name: file.name,
+          category,
+          uploader,
+          size: file.size,
+          time,
+          url: URL.createObjectURL(file)
+        });
+      });
+
+      renderFiles();
+      showToast(`成功加入 ${fileList.length} 個檔案`);
+    }
+
+    function renderFiles() {
+      const filterCat = document.getElementById('file-filter-category').value;
+      const filtered = uploadedFiles.filter(f => filterCat === '全部' || f.category === filterCat);
+
+      document.getElementById('stat-files').textContent = uploadedFiles.length;
+      document.getElementById('file-count-badge').textContent = `${filtered.length} 筆`;
+
+      const container = document.getElementById('file-list');
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="p-10 text-center text-slate-400 text-sm">
+            目前此分類尚無檔案，請由左側上傳檔案。
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(f => `
+        <div class="px-5 py-3.5 hover:bg-slate-50 transition flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <div class="font-semibold text-sm text-slate-800 truncate" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</div>
+              <div class="text-xs text-slate-500 flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-0.5">
+                <span class="px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 font-medium">${escapeHtml(f.category)}</span>
+                <span>${formatFileSize(f.size)}</span>
+                <span>·</span>
+                <span>${escapeHtml(f.uploader)}</span>
+                <span class="hidden sm:inline">· ${escapeHtml(f.time)}</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <a href="${f.url}" download="${escapeHtml(f.name)}" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-emerald-600 text-slate-700 hover:text-white text-xs font-medium transition">
+              下載
+            </a>
+            <button onclick="deleteFile('${f.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition" title="移除檔案">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('file-filter-category').addEventListener('change', renderFiles);
+
+    function deleteFile(id) {
+      const target = uploadedFiles.find(f => f.id === id);
+      if (target && target.url) {
+        URL.revokeObjectURL(target.url);
+      }
+      uploadedFiles = uploadedFiles.filter(f => f.id !== id);
+      renderFiles();
+      showToast('已從清單移除檔案');
+    }
+
+    // --- 初始化渲染 ---
+    function renderAll() {
+      renderAnnouncements();
+      renderProjects();
+      renderFiles();
+    }
+
+    loadInitialData();
+    renderAll();
+  </script>
+</body>
+</html>
